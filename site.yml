@@ -71,7 +71,6 @@
         src: "https://snapshot.debian.org/archive/debian/20170414T152531Z/pool/main/d/dokuwiki/dokuwiki_0.0.20160626.a-2_all.deb"
         dest: "/tmp"
         remote_src: yes
-        validate_certs: no
     
     - name: Install pkg
       apt:
