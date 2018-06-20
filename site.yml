@@ -1,0 +1,126 @@
+# Ansible Playbook for Subutai Dokuwiki blueprint
+---
+
+- hosts: all
+  gather_facts: false
+  remote_user: root
+  tasks: 
+
+    - name: Install tools
+      apt:
+        name: "{{ item }}"
+        state: latest
+      with_items: 
+        - javascript-common
+        - libjs-jquery
+        - libjs-jquery-cookie
+        - libjs-jquery-ui
+        - libphp-simplepie
+        - php-fpm
+        - php-geshi
+        - php-seclib
+        - php-xml
+        - ucf
+        - debconf
+        - php-gd
+        - php-cli
+        - php-ldap
+        - wget
+        - apache2
+      update_cache: yes
+
+    - name: Configure apache2
+      apache_modules:
+    - name: Enable mod_rewrite                                                            
+      apache2_module:                                                                     
+        name: rewrite                                                                     
+        state: present                                                                    
+                                                                                          
+    - name: Enable proxy_fcgi                                                             
+      apache2_module:                                                                     
+        name: proxy_fcgi                                                                  
+        state: present                                                                    
+                                                                                          
+    - name: Enable setenvif                                                               
+      apache2_module:                                                                     
+        name: setenvif                                                                    
+        state: present                                                                    
+                                                                                          
+    - name: Disable mpm_prefork                                                           
+      apache2_module:                                                                     
+        name: mpm_prefork                                                                 
+        state: absent                                                                     
+        ignore_configcheck: True
+    - name: Enable mpm_event                                                              
+      apache2_module:                                                                     
+        name: mpm_event                                                                   
+        state: present                                                                    
+        ignore_configcheck: True                                                          
+                                                                                          
+    - name: Use php7.0-fpm                                                                
+      file:                                                                               
+        state: link                                                                       
+        src: /etc/apache2/conf-available/php7.0-fpm.conf                                  
+        dest: /etc/apache2/conf-enabled/php7.0-fpm.conf                                   
+        force: yes
+
+- hosts: all
+  remote_user: root
+  tasks: 
+
+    - name: Get package
+      copy:
+        src: "https://snapshot.debian.org/archive/debian/20170414T152531Z/pool/main/d/dokuwiki/dokuwiki_0.0.20160626.a-2_all.deb"
+        dest: "/tmp"
+        remote_src: yes
+        validate_certs: no
+    
+    - name: Install pkg
+      apt:
+        deb: /tmp/{{ item }}
+        state: installed
+      with_items:
+        - dokuwiki_0.0.20160626.a-2_all.deb
+
+    - name: Set global accessible
+      debconf:
+        name: dokuwiki
+        question: dokuwiki/system/accessible
+        value: global
+        vtype: select
+    
+    - name: Set title
+      debconf:
+        name: dokuwiki
+        question: dokuwiki/wiki/title
+        value: Debian Dokuwiki - Powered by Subutai
+        vtype: string
+
+    - name: Set password
+      debconf:
+        name: dokuwiki
+        question: dokuwiki/wiki/password
+        value: subutai
+        vtype: password
+        
+    - name: Confirm password
+      debconf:
+        name: dokuwiki
+        question: dokuwiki/wiki/password
+        value: subutai
+        vtype: password
+
+    - name: Copy example content                                                          
+      copy:                                                                               
+        src: html/                                                                        
+        dest: /var/www/html/                                                              
+        owner: www-data                                                                   
+        group: www-data                                                                   
+        mode: 0644                                                                        
+                                                                                          
+    - name: Restart apache                                                                
+      service:                                                                            
+        name: apache2                                                                     
+        state: restarted
+
+# vim: ts=2 et nowrap autoindent
