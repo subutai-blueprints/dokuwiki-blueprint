@@ -67,7 +67,7 @@
   tasks: 
 
     - name: Get package
-      raw: rm -f /tmp/dokuwiki*.deb && wget https://snapshot.debian.org/archive/debian/20170414T152531Z/pool/main/d/dokuwiki/dokuwiki_0.0.20160626.a-2_all.deb
+      raw: rm -f /tmp/dokuwiki*.deb && cd /tmp && wget https://snapshot.debian.org/archive/debian/20170414T152531Z/pool/main/d/dokuwiki/dokuwiki_0.0.20160626.a-2_all.deb
     
     - name: Install pkg
       apt:
@@ -103,6 +103,9 @@
         question: dokuwiki/wiki/password
         value: subutai
         vtype: password
+
+    - name: Apply debconf changes
+      raw: dpkg-reconfigure --priority=critical dokuwiki
 
     - name: Copy example content                                                          
       copy:                                                                               
