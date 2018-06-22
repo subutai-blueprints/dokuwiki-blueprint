@@ -19,6 +19,7 @@
         - php-fpm
         - php-geshi
         - php-seclib
+        - php-mail
         - php-xml
         - ucf
         - debconf
