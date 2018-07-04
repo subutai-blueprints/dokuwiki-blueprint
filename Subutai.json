@@ -32,6 +32,30 @@
             {
                 "key": "domain_name",
                 "value": "${domainName}"
+            },
+            {
+                "key": "webAppPassword",
+                "value": "${webAppPassword}"
+            },
+            {
+                "key": "emailServer",
+                "value": "${emailServer}"
+            },
+            {
+                "key": "emailPort",
+                "value": "${emailPort}"
+            },
+            {
+                "key": "emailAccount",
+                "value": "${emailAccount}"
+            },
+            {
+                "key": "emailUser",
+                "value": "${emailUser}"
+            },
+            {
+                "key": "emailPassword",
+                "value": "${emailPassword}"
             }
         ],
         "groups": [
@@ -62,11 +86,43 @@
             "default": "dokuwiki",
             "validation": "[a-zA-Z0-9]+"
         },
+        "webAppPassword": {
+            "description": "Enter the password of the application",
+            "type": "string",
+            "default": "subutai"
+        },
         "containerSize": {
             "description": "Container Size",
             "type": "enum",
             "default": "SMALL",
             "validation": "TINY,SMALL,MEDIUM,LARGE,HUGE"
+        },
+        "emailServer": {
+            "description": "Server to send Email",
+            "type": "string",
+            "default": "smtp.gmail.com"
+        },
+        "emailPort": {
+            "description": "Server port to send Email",
+            "type": "enum",
+            "default": "587",
+            "validation": "[0-9]+"
+        },
+        "emailAccount": {
+            "description": "Email account to send Email",
+            "type": "string",
+            "default": "myawesomeapp@gmail.com"
+        },
+        "emailUser": {
+            "description": "Email user, usually same as account name but without @gmail.com suffix",
+            "type": "string",
+            "default": "myawesomeapp",
+            "validation": "[a-zA-Z0-9]+"
+        },
+        "emailPassword": {
+            "description": "Email account password",
+            "type": "string",
+            "default": ""
         }
     }
 }

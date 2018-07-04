@@ -28,6 +28,7 @@
         - php-ldap
         - wget
         - apache2
+        - msmtp-mta
       update_cache: yes
 
     - name: Enable mod_rewrite                                                            
@@ -95,14 +96,14 @@
       debconf:
         name: dokuwiki
         question: dokuwiki/wiki/password
-        value: subutai
+        value: "{{ webAppPassword }}"
         vtype: password
         
     - name: Confirm password
       debconf:
         name: dokuwiki
         question: dokuwiki/wiki/password
-        value: subutai
+        value: "{{ webAppPassword }}"
         vtype: password
 
     - name: Apply debconf changes
@@ -110,11 +111,22 @@
 
     - name: Copy example content                                                          
       copy:                                                                               
-        src: html/                                                                        
-        dest: /var/www/html/                                                              
-        owner: www-data                                                                   
-        group: www-data                                                                   
-        mode: 0644                                                                        
+        src: html/
+        dest: /var/www/html/
+        owner: www-data
+        group: www-data
+        mode: 0644       
+        
+    - name: Copy email configuration
+      copy:
+        src: etc/msmtprc                                                                      
+        dest: /etc/
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Apply email configuration
+      raw: sed -i "s/SERVER/{{ emailServer }}/;s/PORT/{{ emailPort }}/;s/ACCOUNT/{{ emailAccount }}/;s/USERNAME/{{ emailUser }}/;s/SECRET/{{ emailPassword }}/" /etc/msmtprc
                                                                                           
     - name: Restart apache                                                                
       service:                                                                            
