@@ -105,8 +105,7 @@
         "emailPort": {
             "description": "Server port to send Email",
             "type": "enum",
-            "default": "587",
-            "validation": "[0-9]+"
+            "default": "587"
         },
         "emailAccount": {
             "description": "Email account to send Email",
