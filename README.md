@@ -1,6 +1,6 @@
 # dokuwiki-blueprint
 
-Dokuwiki is a web application that requires mail service, so that when building this blueprint users are asked to supply a working SMTP server and email account so that emails can be delivered from. A typical way of doing so is using a Gmail account.
+Dokuwiki is a web application that requires mail service, so that when building this blueprint users are asked to supply a working SMTP server and email account that emails can be delivered from. A typical way of doing so is using a Gmail account.
 
 For example your Gmail account is `myawesomeapp@gmail.com` whose password being `TOPSECRET`, then answers to several of the questions are:
  * emailUser: `myawesomeapp`
