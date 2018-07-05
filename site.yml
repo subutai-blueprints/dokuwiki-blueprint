@@ -95,9 +95,16 @@
     - name: Confirm password
       debconf:
         name: dokuwiki
-        question: dokuwiki/wiki/password
+        question: dokuwiki/wiki/confirm
         value: "{{ webAppPassword }}"
         vtype: password
+
+    - name: Do not purge page
+      debconf:
+        name: dokuwiki
+        question: dokuwiki/system/purgepages
+        value: false
+        vtype: boolean
 
     - name: Install pkg
       apt:
